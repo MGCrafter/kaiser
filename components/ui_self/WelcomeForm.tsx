@@ -4,17 +4,17 @@ import { WelcomeMessageData } from '../../types/directus';
 
 interface WelcomeFormProps {
   editingMessage: WelcomeMessageData | null;
-  onFormSubmit: (message: WelcomeMessageData) => void;
+  onFormSubmit: (welcome: WelcomeMessageData) => void;
   onCancel: () => void;
 }
 
 const WelcomeForm: React.FC<WelcomeFormProps> = ({ editingMessage, onFormSubmit, onCancel }) => {
-  const [message, setMessage] = useState('');
+  const [welcome, setMessage] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
     if (editingMessage) {
-      setMessage(editingMessage.message);
+      setMessage(editingMessage.welcome);
     } else {
       setMessage('');
     }
@@ -22,9 +22,9 @@ const WelcomeForm: React.FC<WelcomeFormProps> = ({ editingMessage, onFormSubmit,
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (message.trim()) {
+    if (welcome.trim()) {
       setError('');
-      onFormSubmit({ message });
+      onFormSubmit({ welcome });
     } else {
       setError('Bitte geben Sie eine Nachricht ein.');
     }
@@ -36,7 +36,7 @@ const WelcomeForm: React.FC<WelcomeFormProps> = ({ editingMessage, onFormSubmit,
         <label className="block text-gray-700">Message</label>
         <input
           type="text"
-          value={message}
+          value={welcome}
           onChange={(e) => setMessage(e.target.value)}
           className="border border-gray-300 rounded py-2 px-4 w-full"
           required
