@@ -59,7 +59,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="video relative min-h-screen w-full overflow-auto">
+    <div className="video relative min-h-90vh w-full overflow-auto">
       {/* Video Background */}
       <div className="absolute inset-0 z-10">
         <video className="h-full w-full object-cover" autoPlay muted loop>
