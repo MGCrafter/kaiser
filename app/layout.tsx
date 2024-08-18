@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 
 export const metadata = {
-  title: "KaiserJas",
+  title: "KaiserJasulyo - Linktree",
   description: "Linktree by NekoZDevTeam",
 };
 
