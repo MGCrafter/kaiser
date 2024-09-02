@@ -62,10 +62,12 @@ export default function HomePage() {
     <div className="video relative min-h-90vh w-full overflow-auto">
       {/* Video Background */}
       <div className="absolute inset-0 z-10">
-        <video className="h-full w-full object-cover" autoPlay muted loop>
+        
+        {/*<!--video className="h-full w-full object-cover" autoPlay muted loop>
           <source src="/Mod_fam_galaxy.webp" type="video/mp4" />
           Your browser does not support the video tag.
-        </video>
+        </video-->*/}
+        <img src="/Mod_fam_galaxy.webp"></img>
       </div>
 
       {/* Content */}
