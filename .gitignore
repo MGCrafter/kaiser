@@ -122,7 +122,6 @@ components/ui/animated-modal.tsx
 components/ui/animated-tooltip.tsx
 components/ui/apple-cards-carousel.tsx
 components/ui/aurora-background.tsx
-components/ui/background-beams.tsx
 components/ui/background-boxes.tsx
 components/ui/background-gradient-animation.tsx
 components/ui/background-gradient.tsx
@@ -157,8 +156,6 @@ components/ui/moving-border.jsx
 components/ui/moving-line.tsx
 components/ui/multi-step-loader.tsx
 components/ui/navbar-menu.tsx
-components/ui/parallax-scroll-2.tsx
-components/ui/parallax-scroll.tsx
 components/ui/placeholders-and-vanish-input.tsx
 components/ui/sidebar.tsx
 components/ui/sparkles.tsx
