@@ -19,15 +19,7 @@ export default function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  useEffect(() => {
-    // Setze overflow: hidden auf dem <body>
-    document.body.style.overflow = "hidden";
 
-    // Bereinige den Effekt, wenn die Komponente entladen wird
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, []);
   useEffect(() => {
     async function fetchData() {
       console.log("Fetching data from Directus...");
@@ -63,7 +55,7 @@ export default function HomePage() {
   }
 
   const images = bildergalerie.map(
-    (bild) => `${DIRECTUS_URL}/assets/${bild.picture}`,
+    (bild) => `https://ik.imagekit.io/4pnuuwrtm/${DIRECTUS_URL}/assets/${bild.picture}`,
   );
   // Modal öffnen
 
