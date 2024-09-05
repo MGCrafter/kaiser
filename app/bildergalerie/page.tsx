@@ -62,13 +62,13 @@ export default function HomePage() {
     return <Spinner />;
   }
 
-  /*const images = bildergalerie.map(
+  const images = bildergalerie.map(
     (bild) => `${DIRECTUS_URL}/assets/${bild.picture}`,
-  );*/
+  );
   // Modal öffnen
 
   return (
-    <div className="video relative min-h-90vh w-full overflow-auto bg-gray-950">
+    <div className="video relative min-h-90vh w-full overflow-auto bg-gray-900">
       <div className="m relative z-20 flex h-full flex-col items-center justify-center">
         <Header title={header.ueberschrift} />
         <ParallaxScroll images={images} />
@@ -78,8 +78,8 @@ export default function HomePage() {
     </div>
   );
 }
-const images = [
+/*const images = [
     "https://images.unsplash.com/photo-1554080353-a576cf803bda?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3387&q=80",
     "https://directus-1.nekozdevteam.eu/assets/4bb7fcc6-723d-46ed-8735-fc4d4d95f0e1"
 
-];
+];*/
