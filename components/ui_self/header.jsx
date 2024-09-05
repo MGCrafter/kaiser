@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 const Header = ({ title }) => {
   return (
     <header className="pt-12">
-      <motion.h1
+      <motion.h1><motion.a
+        href="/"
         className="text-center font-bold uppercase"
         style={{
           background: 'linear-gradient(45deg, #8f6b29, #fde08d, #df9f28)', // Goldener Verlauf
@@ -17,6 +18,7 @@ const Header = ({ title }) => {
         transition={{ duration: 1 }}
       >
         {title}
+      </motion.a>
       </motion.h1>
     </header>
   );

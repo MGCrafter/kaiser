@@ -4,6 +4,7 @@ const LinkButton = ({ children, href }) => {
   return (
     <motion.a
       href={href}
+      target="_blank"
       className="inline-flex items-center justify-center text-center font-bold uppercase no-underline cursor-pointer shadow-md
                  rounded-md relative overflow-hidden border-solid"
       style={{

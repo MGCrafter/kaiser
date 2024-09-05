@@ -66,4 +66,12 @@
   body {
     @apply bg-background text-foreground;
   }
+  .errormessage{
+    text-align: center;
+    font-size: 4rem;
+    color: red;
+    border: 2px solid black;
+    width: 80%;
+    margin: 180px auto;
+  }
 }

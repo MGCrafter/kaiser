@@ -6,6 +6,7 @@ import Spinner from "../components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Header from "../components/ui_self/header";
+import { BackgroundBeams } from "@/components/ui/background-beams";
 
 // Importiere die Typdefinitionen
 import {
@@ -41,7 +42,7 @@ export default function HomePage() {
         setLinks(data2.data as LinkData[]);
       } catch (err) {
         console.error("Error fetching global data:", err);
-        setError("Error fetching data");
+        setError("Error Fetching Data, try reloading the page");
       } finally {
         setTimeout(() => {
           setLoading(false);
@@ -51,7 +52,7 @@ export default function HomePage() {
     fetchData();
   }, []);
   if (error) {
-    return <div>{error}</div>;
+    return <div className="errormessage">{error}</div>;
   }
 
   if (loading || !header || links.length === 0) {
@@ -59,17 +60,8 @@ export default function HomePage() {
   }
 
   return (
-    <div className="video relative min-h-90vh w-full overflow-auto">
-      {/* Video Background */}
-      <div className="absolute inset-0 z-10">
-        
-        {/*<!--video className="h-full w-full object-cover" autoPlay muted loop>
-          <source src="/Mod_fam_galaxy.webp" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video-->*/}
-        <img src="/Mod_fam_galaxy.webp"></img>
-      </div>
-
+    <div className="video relative min-h-90vh w-full overflow-auto bg-gray-950">
+      
       {/* Content */}
       <div className="m relative z-20 flex h-full flex-col items-center justify-center">
         <Header title={header.ueberschrift} />
@@ -93,6 +85,7 @@ export default function HomePage() {
           ))}
         </div>
       </div>
+      <BackgroundBeams />
     </div>
   );
 }
