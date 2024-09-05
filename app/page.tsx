@@ -60,7 +60,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="video relative min-h-90vh w-full overflow-auto bg-gray-950">
+    <div className="video relative min-h-90vh w-full overflow-auto bg-gray-800">
       
       {/* Content */}
       <div className="m relative z-20 flex h-full flex-col items-center justify-center">
