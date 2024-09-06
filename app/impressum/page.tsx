@@ -48,7 +48,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="relative min-h-screen w-full bg-gray-950">
+    <div className="relative min-h-screen w-full bg-gray-900">
       <div className="relative z-20 flex flex-col items-center justify-center py-10 px-4">
         <Header title={header.ueberschrift} />
         <div className="m-6 text-center text-white max-w-screen-md w-full px-4">
