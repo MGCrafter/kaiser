@@ -7,26 +7,12 @@ const LinkButton = ({ children, href }) => {
   return (
     <motion.a
       href={href}
-      target={isExternal ? '_blank' : '_self'} // Externe Links in neuem Tab öffnen
-      rel={isExternal ? 'noopener noreferrer' : undefined} // Sicherheitsmaßnahme für externe Links
-      className="inline-flex items-center justify-center text-center font-bold uppercase no-underline cursor-pointer shadow-md rounded-md relative overflow-hidden border-5 border-solid
-                 border-yellow-700 transition-transform duration-300 ease-in-out transform hover:scale-105"
-      style={{
-        padding: '2px 2px',
-        height: '111px',
-        width: '450px', // Feste Breite
-        maxWidth: '100%', // Button passt sich an den Bildschirm an
-        fontSize: '18px',
-        fontFamily: '"Arial", sans-serif',
-        background: 'linear-gradient(45deg, #8f6b29, #fde08d, #df9f28)', // Goldener Verlauf
-        color: '#664d1e',
-        transition: 'background 0.3s ease, transform 0.3s ease',
-        boxSizing: 'border-box',
-      }}
-      whileHover={{
-        background: 'linear-gradient(45deg, #df9f28, #fde08d, #8f6b29)', // Umgekehrter Verlauf bei Hover
-        scale: 1.05,
-      }}
+      target={isExternal ? '_blank' : '_self'}
+      rel={isExternal ? 'noopener noreferrer' : undefined}
+      className="inline-flex items-center justify-center text-center font-bold uppercase no-underline cursor-pointer shadow-md rounded-md relative overflow-hidden
+                 border-5 border-solid border-yellow-700 transition-transform duration-300 ease-in-out transform hover:scale-105
+                 h-[111px] w-[250px] max-w-full text-[18px] bg-gradient-to-r from-[#8f6b29] via-[#fde08d] to-[#df9f28] text-[#664d1e]
+                 box-border  md:w-[460px]"
     >
       {children}
 
