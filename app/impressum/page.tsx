@@ -4,8 +4,6 @@ import { DIRECTUS_URL, MODELS } from "@/lib/config.js";
 import Spinner from "@/components/ui/spinner";
 import Header from "@/components/ui_self/header";
 import { BackgroundBeams } from "@/components/ui/background-beams";
-
-// Importiere die Typdefinitionen
 import { HeaderMessageData, impressumData } from "@/types/directus";
 
 export default function HomePage() {
@@ -20,7 +18,7 @@ export default function HomePage() {
       try {
         const response = await fetch(`${DIRECTUS_URL}/items/${MODELS.HEADER}`);
         const response1 = await fetch(
-          `${DIRECTUS_URL}/items/${MODELS.IMPRESSUM}`,
+          `${DIRECTUS_URL}/items/${MODELS.IMPRESSUM}`
         );
 
         const data = await response.json();
@@ -40,6 +38,7 @@ export default function HomePage() {
     }
     fetchData();
   }, []);
+
   if (error) {
     return <div className="errormessage">{error}</div>;
   }
@@ -49,24 +48,86 @@ export default function HomePage() {
   }
 
   return (
-    <div className="video relative min-h-90vh w-full overflow-auto bg-gray-950">
-      <div className="m relative z-20 flex h-full flex-col items-center justify-center">
+    <div className="relative min-h-screen w-full bg-gray-950">
+      <div className="relative z-20 flex flex-col items-center justify-center py-10 px-4">
         <Header title={header.ueberschrift} />
-        <div className="m-6 text-center text-white">
-          {/*Impressum*/}
-          {impressum && 
-            
-            impressum?.content_blocks?.blocks?.length > 0 ? (
-              impressum.content_blocks.blocks.map((block, index) => (
-                <div key={index} className="block-editor-content mt-4">
-                  {block.type === 'paragraph' && <p className="text-2xl">{block.data.text}</p>}
-                  {block.type === 'header' && <h2 className="text-5xl">{block.data.text}</h2>}
-                  {/* Weitere Blocktypen können hier hinzugefügt werden, falls erforderlich */}
-                </div>
-            ))): null}
+        <div className="m-6 text-center text-white max-w-screen-md w-full px-4">
+          {/* Impressum Rendering */}
+          {impressum && impressum?.content_blocks?.blocks?.length > 0 ? (
+            impressum.content_blocks.blocks.map((block, index) => (
+              <div
+                key={index}
+                className="block-editor-content mt-4 w-full max-w-full mx-auto"
+              >
+                {renderBlockContent(block)}
+              </div>
+            ))
+          ) : (
+            <p>Keine Inhalte verfügbar.</p>
+          )}
         </div>
       </div>
       <BackgroundBeams />
     </div>
   );
+}
+
+// Funktion zum Rendern des Inhalts basierend auf dem Block-Typ
+function renderBlockContent(block?: any) {
+  switch (block.type) {
+    case "paragraph":
+      return (
+        <p className="text-lg leading-relaxed break-words whitespace-normal">
+          {block.data.text}
+        </p>
+      );
+    case "header":
+      return renderHeader(block); // Separates Rendering für verschiedene Header-Level
+    case "image":
+      return (
+        <img
+          src={block.data.url}
+          alt={block.data.alt || "Bild"}
+          className="w-full max-w-md mx-auto"
+        />
+      );
+    case "quote":
+      return (
+        <blockquote className="border-l-4 border-gray-500 pl-4 italic text-lg break-words whitespace-normal">
+          {block.data.text}
+        </blockquote>
+      );
+    default:
+      return null; // Falls der Blocktyp nicht unterstützt wird, wird nichts gerendert.
+  }
+}
+
+// Funktion zum Rendern von Headern, basierend auf der Header-Level
+function renderHeader(block?: any) {
+  switch (block.data.level) {
+    case 1:
+      return (
+        <h1 className="text-4xl font-bold break-words whitespace-normal">
+          {block.data.text}
+        </h1>
+      );
+    case 2:
+      return (
+        <h2 className="text-3xl font-bold break-words whitespace-normal">
+          {block.data.text}
+        </h2>
+      );
+    case 3:
+      return (
+        <h3 className="text-2xl font-bold break-words whitespace-normal">
+          {block.data.text}
+        </h3>
+      );
+    default:
+      return (
+        <p className="text-lg break-words whitespace-normal">
+          {block.data.text}
+        </p>
+      ); // Fallback zu einem Paragraphen für unbekannte Level
+  }
 }
