@@ -1,6 +1,7 @@
 // components/LinkForm.tsx
 import { useState, useEffect } from 'react';
 import { LinkData } from '../../types/directus';
+import { Save, X } from 'lucide-react';
 
 interface LinkFormProps {
   editingLink: LinkData | null;
@@ -49,56 +50,67 @@ const LinkForm: React.FC<LinkFormProps> = ({ editingLink, onFormSubmit, onCancel
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="url" className="block text-sm font-medium text-gray-700">
-          URL
-        </label>
-        <input
-          type="url"
-          id="url"
-          value={url}
-          onChange={(e) => {
-            setUrl(e.target.value);
-            setUrlError('');
-          }}
-          required
-          placeholder="https://example.com"
-          className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 sm:text-sm ${
-            urlError ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-indigo-500'
-          }`}
-        />
-        {urlError && (
-          <p className="mt-1 text-sm text-red-600">{urlError}</p>
-        )}
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium text-gray-300 mb-2">
+            Titel
+          </label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            placeholder="z.B. Mein Instagram"
+            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="url" className="block text-sm font-medium text-gray-300 mb-2">
+            URL
+          </label>
+          <input
+            type="url"
+            id="url"
+            value={url}
+            onChange={(e) => {
+              setUrl(e.target.value);
+              setUrlError('');
+            }}
+            required
+            placeholder="https://example.com"
+            className={`w-full px-3 py-2 bg-gray-700 border text-white rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${
+              urlError
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-600 focus:ring-blue-500'
+            }`}
+          />
+          {urlError && (
+            <p className="mt-1.5 text-sm text-red-400">{urlError}</p>
+          )}
+        </div>
       </div>
-      <div>
-        <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-          Title
-        </label>
-        <input
-          type="text"
-          id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-        />
-      </div>
-      <div className="mt-4">
+
+      <div className="flex gap-3 pt-2">
         <button
           type="submit"
-          className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
         >
-          {editingLink ? 'Update Link' : 'Add Link'}
+          <Save className="w-4 h-4 mr-2" />
+          {editingLink ? 'Aktualisieren' : 'Hinzufügen'}
         </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Cancel
-        </button>
+        {editingLink && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="inline-flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 font-medium rounded-md transition-colors"
+          >
+            <X className="w-4 h-4 mr-2" />
+            Abbrechen
+          </button>
+        )}
       </div>
     </form>
   );

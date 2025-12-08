@@ -1,6 +1,7 @@
 // components/ui_self/WelcomeForm.tsx
 import { useState, useEffect } from 'react';
 import { WelcomeMessageData } from '../../types/directus';
+import { Save, X } from 'lucide-react';
 
 interface WelcomeFormProps {
   editingMessage: WelcomeMessageData | null;
@@ -31,31 +32,42 @@ const WelcomeForm: React.FC<WelcomeFormProps> = ({ editingMessage, onFormSubmit,
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4">
-      <div className="mb-2">
-        <label className="block text-gray-700">Message</label>
-        <input
-          type="text"
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label htmlFor="welcome" className="block text-sm font-medium text-gray-300 mb-2">
+          Welcome-Nachricht
+        </label>
+        <textarea
+          id="welcome"
           value={welcome}
           onChange={(e) => setMessage(e.target.value)}
-          className="border border-gray-300 rounded py-2 px-4 w-full"
+          rows={3}
+          placeholder="z.B. Willkommen auf meiner Seite!"
           required
+          className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
         />
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="mt-1.5 text-sm text-red-400">{error}</p>}
       </div>
-      <button
-        type="submit"
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        {editingMessage ? 'Update' : 'Add'}
-      </button>
-      <button
-        type="button"
-        onClick={onCancel}
-        className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2"
-      >
-        Cancel
-      </button>
+
+      <div className="flex gap-3">
+        <button
+          type="submit"
+          className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
+        >
+          <Save className="w-4 h-4 mr-2" />
+          {editingMessage ? 'Aktualisieren' : 'Hinzufügen'}
+        </button>
+        {editingMessage && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="inline-flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 font-medium rounded-md transition-colors"
+          >
+            <X className="w-4 h-4 mr-2" />
+            Abbrechen
+          </button>
+        )}
+      </div>
     </form>
   );
 };
