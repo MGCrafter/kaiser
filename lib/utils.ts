@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { DIRECTUS_URL, MODELS } from "../lib/config.js";
+import { DIRECTUS_URL, MODELS } from "../lib/config";
 import { LinkData, WelcomeMessageData, HeaderMessageData } from "../types/directus";
 import useUserStore from './state'; 
 

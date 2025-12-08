@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import { DIRECTUS_URL, MODELS } from "@/lib/config.js";
+import { DIRECTUS_URL, MODELS } from "@/lib/config";
 import Spinner from "@/components/ui/spinner";
 import Header from "@/components/ui_self/header";
 import { BackgroundBeams } from "@/components/ui/background-beams";
-import { HeaderMessageData, impressumData } from "@/types/directus";
+import { HeaderMessageData, impressumData, BlockEditorData } from "@/types/directus";
 
 export default function HomePage() {
   const [header, setHeader] = useState<HeaderMessageData | null>(null);
@@ -14,26 +14,30 @@ export default function HomePage() {
 
   useEffect(() => {
     async function fetchData() {
-      console.log("Fetching data from Directus...");
       try {
-        const response = await fetch(`${DIRECTUS_URL}/items/${MODELS.HEADER}`);
-        const response1 = await fetch(
-          `${DIRECTUS_URL}/items/${MODELS.IMPRESSUM}`
-        );
+        // Parallele API-Aufrufe für bessere Performance
+        const [headerResponse, impressumResponse] = await Promise.all([
+          fetch(`${DIRECTUS_URL}/items/${MODELS.HEADER}`),
+          fetch(`${DIRECTUS_URL}/items/${MODELS.IMPRESSUM}`),
+        ]);
 
-        const data = await response.json();
-        const data1 = await response1.json();
+        // Response Validierung
+        if (!headerResponse.ok || !impressumResponse.ok) {
+          throw new Error('Failed to fetch data from server');
+        }
 
-        console.log("Data fetched successfully:", data, data1);
-        setHeader(data.data[0] as HeaderMessageData);
-        setImpressum(data1.data[0] as impressumData);
+        const [headerData, impressumData] = await Promise.all([
+          headerResponse.json(),
+          impressumResponse.json(),
+        ]);
+
+        setHeader(headerData.data[0] as HeaderMessageData);
+        setImpressum(impressumData.data[0] as impressumData);
       } catch (err) {
-        console.error("Error fetching global data:", err);
-        setError("Error Fetching Data, try reloading the page");
+        console.error("Error fetching data:", err);
+        setError("Fehler beim Laden des Impressums. Bitte Seite neu laden.");
       } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 1500);
+        setLoading(false);
       }
     }
     fetchData();
@@ -54,9 +58,9 @@ export default function HomePage() {
         <div className="m-6 text-center text-white max-w-screen-md w-full px-4">
           {/* Impressum Rendering */}
           {impressum && impressum?.content_blocks?.blocks?.length > 0 ? (
-            impressum.content_blocks.blocks.map((block, index) => (
+            impressum.content_blocks.blocks.map((block) => (
               <div
-                key={index}
+                key={block.id}
                 className="block-editor-content mt-4 w-full max-w-full mx-auto"
               >
                 {renderBlockContent(block)}
@@ -73,7 +77,9 @@ export default function HomePage() {
 }
 
 // Funktion zum Rendern des Inhalts basierend auf dem Block-Typ
-function renderBlockContent(block?: any) {
+function renderBlockContent(block: BlockEditorData) {
+  if (!block?.data) return null;
+
   switch (block.type) {
     case "paragraph":
       return (
@@ -82,7 +88,7 @@ function renderBlockContent(block?: any) {
         </p>
       );
     case "header":
-      return renderHeader(block); // Separates Rendering für verschiedene Header-Level
+      return renderHeader(block);
     case "image":
       return (
         <img
@@ -98,13 +104,17 @@ function renderBlockContent(block?: any) {
         </blockquote>
       );
     default:
-      return null; // Falls der Blocktyp nicht unterstützt wird, wird nichts gerendert.
+      return null;
   }
 }
 
 // Funktion zum Rendern von Headern, basierend auf der Header-Level
-function renderHeader(block?: any) {
-  switch (block.data.level) {
+function renderHeader(block: BlockEditorData) {
+  if (!block?.data?.text) return null;
+
+  const level = (block.data as any).level;
+
+  switch (level) {
     case 1:
       return (
         <h1 className="text-4xl font-bold break-words whitespace-normal">
@@ -128,6 +138,6 @@ function renderHeader(block?: any) {
         <p className="text-lg break-words whitespace-normal">
           {block.data.text}
         </p>
-      ); // Fallback zu einem Paragraphen für unbekannte Level
+      );
   }
 }

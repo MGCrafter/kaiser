@@ -31,7 +31,11 @@ const LinkTable: React.FC = () => {
     setEditingLink(link);
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: number, title: string) => {
+    // Bestätigung vor dem Löschen
+    const confirmed = window.confirm(`Möchtest du den Link "${title}" wirklich löschen?`);
+    if (!confirmed) return;
+
     setLoading(true);
     try {
       await deleteLink(id);
@@ -48,8 +52,8 @@ const LinkTable: React.FC = () => {
   const handleFormSubmit = async (link: LinkData) => {
     setLoading(true);
     try {
-      if (editingLink) {
-        const updatedLink = await updateLink(editingLink.id!, link);
+      if (editingLink && editingLink.id) {
+        const updatedLink = await updateLink(editingLink.id, link);
         setLinks(links.map((l) => (l.id === updatedLink.id ? updatedLink : l)));
         setEditingLink(null);
         toast.success("Link erfolgreich aktualisiert!");
@@ -89,7 +93,7 @@ const LinkTable: React.FC = () => {
           </thead>
           <tbody>
             {links.map((link) => (
-              <tr key={link.url}>
+              <tr key={link.id || link.url}>
                 <td className="border px-4 py-2">{link.url}</td>
                 <td className="border px-4 py-2">{link.title}</td>
                 <td className="border px-4 py-2">
@@ -99,12 +103,14 @@ const LinkTable: React.FC = () => {
                   >
                     Edit
                   </button>
-                  <button
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
-                    onClick={() => handleDelete(link.id!)}
-                  >
-                    Delete
-                  </button>
+                  {link.id && (
+                    <button
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
+                      onClick={() => handleDelete(link.id!, link.title)}
+                    >
+                      Delete
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

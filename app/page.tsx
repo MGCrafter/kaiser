@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { DIRECTUS_URL, MODELS } from "../lib/config.js";
+import { DIRECTUS_URL, MODELS } from "../lib/config";
 import LinkButton from "../components/ui_self/button";
 import Spinner from "../components/ui/spinner";
 import { cn } from "@/lib/utils";
@@ -24,29 +24,33 @@ export default function HomePage() {
 
   useEffect(() => {
     async function fetchData() {
-      console.log("Fetching data from Directus...");
       try {
-        const response = await fetch(`${DIRECTUS_URL}/items/${MODELS.HEADER}`);
-        const response1 = await fetch(
-          `${DIRECTUS_URL}/items/${MODELS.WELCOME}`,
-        );
-        const response2 = await fetch(`${DIRECTUS_URL}/items/${MODELS.LINKS}`);
+        // Parallele API-Aufrufe für bessere Performance
+        const [headerResponse, welcomeResponse, linksResponse] = await Promise.all([
+          fetch(`${DIRECTUS_URL}/items/${MODELS.HEADER}`),
+          fetch(`${DIRECTUS_URL}/items/${MODELS.WELCOME}`),
+          fetch(`${DIRECTUS_URL}/items/${MODELS.LINKS}`),
+        ]);
 
-        const data = await response.json();
-        const data1 = await response1.json();
-        const data2 = await response2.json();
+        // Response Validierung
+        if (!headerResponse.ok || !welcomeResponse.ok || !linksResponse.ok) {
+          throw new Error('Failed to fetch data from server');
+        }
 
-        console.log("Data fetched successfully:", data);
-        setHeader(data.data[0] as HeaderMessageData);
-        setWelcome(data1.data[0] as WelcomeMessageData);
-        setLinks(data2.data as LinkData[]);
+        const [headerData, welcomeData, linksData] = await Promise.all([
+          headerResponse.json(),
+          welcomeResponse.json(),
+          linksResponse.json(),
+        ]);
+
+        setHeader(headerData.data[0] as HeaderMessageData);
+        setWelcome(welcomeData.data[0] as WelcomeMessageData);
+        setLinks(linksData.data as LinkData[]);
       } catch (err) {
-        console.error("Error fetching global data:", err);
-        setError("Error Fetching Data, try reloading the page");
+        console.error("Error fetching data:", err);
+        setError("Fehler beim Laden der Daten. Bitte Seite neu laden.");
       } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 1500);
+        setLoading(false);
       }
     }
     fetchData();
@@ -72,9 +76,9 @@ export default function HomePage() {
           </h2>
         )}
         <div className="b mt-4">
-          {links.map((link, index) => (
+          {links.map((link) => (
             <motion.div
-              key={index}
+              key={link.id || link.url}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}

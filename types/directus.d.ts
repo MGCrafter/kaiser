@@ -17,9 +17,9 @@ export interface HeaderMessageData {
     id: number;
     content_blocks: ContentBlocks; // Block Editor Datenfeld mit verschachtelten Blöcken
   }
-  export interface bieldergalerieData {
+  export interface BildergalerieData {
     id: number;
-    sort: number
+    sort: number;
     picture: string;
   }
   
